@@ -128,21 +128,111 @@ strtol 함수: 문자열을 숫자로 변환하는 함수입니다. mode 문자�
 
 chmod 함수: 파일의 권한을 설정하는 함수입니다. filename과 chmod_result 값을 전달하여 파일의 권한을 변경합니다. 변경에 실패하면 perror 함수를 사용하여 오류 메시지를 출력합니다.
 
-## 12 chown 명령어 구현
+## 12 clear 명령어 구현
 
-파일 또는 디렉토리의 소유자를 변경하는 명령어이다.
+![image](https://github.com/wini66/linux_pj/assets/119557644/ac68d46f-b14a-4e06-87d3-aceedbada37c)
 
-## 13 data 명령어 구현
+화면을 모두 지우는 명령어이다.
 
-현재 날짜와 시간을 출력하는 명령어이다.
+ANSI 이스케이프 시퀀스를 사용하여 터미널 화면을 지우는 기능을 수행합니다. printf 함수를 사용하여 \033[H\033[J를 출력함으로써 터미널 화면을 초기화합니다.
+
+## 13 whoami 명령어 구현
+
+![image](https://github.com/wini66/linux_pj/assets/119557644/f49de339-c610-4ce8-bb76-39532b93effe)
+
+현재 로그인한 사용자의 이름을 출력하는 명령어이다.
+
+위의 코드는 getenv("USER") 함수를 사용하여 현재 사용자의 이름을 가져오는 기능을 구현한 것입니다.
+
+char *username = getenv("USER");: getenv("USER") 함수를 사용하여 환경 변수에서 "USER" 값을 가져와 username 변수에 저장합니다. 이는 현재 사용자의 이름을 나타냅니다.
+
+if (username != NULL) {: 가져온 사용자 이름이 NULL이 아닌 경우에만 아래의 코드 블록을 실행합니다. 이는 사용자 이름이 성공적으로 가져와졌는지 확인하는 용도입니다.
+
+printf("Current user: %s\n", username);: 현재 사용자의 이름을 출력합니다. %s 형식 지정자를 사용하여 문자열을 출력하고, username 변수를 인자로 전달합니다.
+
+else {: 가져온 사용자 이름이 NULL인 경우, 즉 환경 변수에서 사용자 이름을 가져오지 못한 경우에 아래의 코드 블록을 실행합니다.
+
+perror("getenv");: getenv 함수에서 에러가 발생한 경우, perror 함수를 사용하여 에러 메시지를 출력합니다.
+
+return 1;: 에러가 발생했으므로 프로그램을 종료하기 전에 1을 반환하여 오류 상태를 나타냅니다.
+
+return 0;: 프로그램이 정상적으로 실행되었으므로 0을 반환하여 성공 상태를 나타냅니다.
 
 ## 14 wc 명령어 구현
 
+![image](https://github.com/wini66/linux_pj/assets/119557644/06d16c2d-19cc-4b6b-b441-77ece879eaa9)
+
 파일 내의 단어,줄,문자 수 등을 계산하는 명령어이다.
 
-## 15 head 명령어 구현
+getchar() 함수를 사용하여 문자를 하나씩 읽어오며, 각각의 조건에 따라 해당 값을 증가시키고, 최종 결과를 출력합니다. 프로그램은 사용자가 Ctrl+D를 누를 때까지 입력을 받습니다.
+
+## 15 hostname 명령어 구현
+
+![image](https://github.com/wini66/linux_pj/assets/119557644/9b9b8a00-f0f7-424d-af5e-9fdbfed8f9c4)
+
+현재 시스템의 호스트이름을 확인하는 명령어이다.
+
+gethostname 함수: 이 함수는 호스트 이름을 가져오는 시스템 호출입니다. 호스트 이름을 저장하기 위해 hostname 배열을 사용하고, gethostname 함수를 호출하여 실제 호스트 이름을 가져옵니다. 성공적으로 호스트 이름을 가져오면 출력됩니다.
+
+오류 처리: 만약 gethostname 함수가 실패하면 perror 함수를 사용하여 오류 메시지를 출력합니다. 이를 통해 오류가 발생한 원인을 파악할 수 있습니다. 오류가 발생하면 프로그램은 종료됩니다.
+
+
+## 16 uname 명령어 구현
+
+![image](https://github.com/wini66/linux_pj/assets/119557644/f7ad6b7a-ecf6-4d60-805d-bc1b48cd05ba)
+
+시스템 정보를 가져와서 출력하는 명령어이다.
+
+struct utsname sys_info;: sys/utsname.h 헤더 파일에 정의된 struct utsname 구조체 변수 sys_info를 선언합니다. 이 구조체는 시스템 정보를 저장하는 멤버들로 구성되어 있습니다.
+
+if (uname(&sys_info) == -1) {: uname 함수를 사용하여 시스템 정보를 가져오는데, 이때 &sys_info를 인자로 전달합니다. uname 함수는 성공적으로 실행되면 0을 반환하고, 실패하면 -1을 반환합니다. 따라서 반환값이 -1인 경우에만 아래의 코드 블록을 실행합니다.
+
+perror("uname");: uname 함수에서 에러가 발생한 경우, perror 함수를 사용하여 에러 메시지를 출력합니다.
+
+printf("System name: %s\n", sys_info.sysname);: sys_info 구조체의 sysname 멤버를 출력하여 시스템 이름을 표시합니다. printf 함수와 %s 형식 지정자를 사용하여 문자열을 출력하고, sys_info.sysname 변수를 인자로 전달합니다. 이와 같은 방식으로 다른 시스템 정보도 출력합니다.
+
+return 0;: 프로그램이 정상적으로 실행되었으므로 0을 반환하여 성공 상태를 나타냅니다.
+
+## 17 history 명령어 구현
+
+![image](https://github.com/wini66/linux_pj/assets/119557644/0a5915dd-85b3-495d-9ec7-afec10057760)
+
+사용자가 이전에 입력한 명령어들의 기록을 보여주는 명령어다. 숫자 1은 실행한 명령어의 순서를 보여준다.
+
+char* history[HISTORY_SIZE];: history는 입력된 명령어를 저장할 문자열 포인터 배열입니다. HISTORY_SIZE는 배열의 최대 크기를 나타내는 상수입니다.
+
+printf("Enter a command: ");: 사용자에게 명령어를 입력하라는 안내 메시지를 출력합니다.
+
+fgets(input, sizeof(input), stdin);: fgets 함수를 사용하여 사용자로부터 입력을 받습니다. input 배열에 최대 100자까지 입력된 문자열이 저장됩니다.
+
+history[count] = strdup(input);: 입력된 명령어를 strdup 함수를 사용하여 동적으로 복제하여 history 배열에 저장합니다. 이를 통해 입력된 명령어가 메모리에 안전하게 보관됩니다.
+
+count++;: 명령어 개수를 증가시킵니다.
+
+printf("%d: %s", i+1, history[i]);: history 배열에 저장된 명령어를 인덱스와 함께 출력합니다. i+1은 인덱스를 1부터 시작하도록 보정하는 역할을 합니다.
+
+free(history[i]);: history 배열에 동적으로 할당된 메모리를 해제합니다. 이를 통해 사용이 완료된 메모리를 반환합니다.
+
+## 18 head 명령어 구현
+
+![head1](https://github.com/wini66/linux_pj/assets/119557644/1efa8efd-3a47-4b92-9392-245fd79c80a8)
 
 파일의 앞 부분을 일부 출력하는 명령어이다.
+
+main 함수: 프로그램의 진입점입니다. 명령행 인수를 통해 파일 이름을 전달받습니다.
+
+argc와 argv: argc는 명령행 인수의 개수를 나타내는 변수이고, argv는 인수를 저장하는 문자열 배열입니다. argc가 2보다 작을 경우 사용법을 출력하고 프로그램을 종료합니다.
+
+파일 열기: fopen 함수를 사용하여 명령행 인수로 전달받은 파일을 읽기 모드로 엽니다. 파일이 존재하지 않거나 열 수 없는 경우 오류 메시지를 출력하고 프로그램을 종료합니다.
+
+파일 내용 출력: fgets 함수를 사용하여 파일에서 한 줄씩 읽어옵니다. MAX_LINES로 지정한 줄 수까지 읽고 출력합니다.
+
+파일 닫기: fclose 함수를 사용하여 파일을 닫아 리소스를 해제합니다.
+
+
+
+
+
 
 
 
